@@ -11,10 +11,13 @@ const Index = () => {
     setFile(e.target.files[0]);
   };
 
-  const checkAccessibility = () => {
-    // Simulated accessibility check
-    const detectedIssues = ["Missing alternative text for images", "Incorrect heading structure", "Lack of tagged PDF"];
-    setIssues(detectedIssues);
+  const checkAccessibility = async () => {
+    const response = await new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(["Missing alternative text for images", "Incorrect heading structure", "Lack of tagged PDF"]);
+      }, 2000);
+    });
+    setIssues(response);
   };
 
   const remediatePDF = () => {
