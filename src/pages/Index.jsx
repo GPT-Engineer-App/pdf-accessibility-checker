@@ -5,6 +5,7 @@ import { FaFileUpload, FaCheck, FaTimes } from "react-icons/fa";
 const Index = () => {
   const [file, setFile] = useState(null);
   const [issues, setIssues] = useState([]);
+  const [accessibilityScore, setAccessibilityScore] = useState(0);
   const [isRemediated, setIsRemediated] = useState(false);
 
   const handleFileChange = (e) => {
@@ -14,10 +15,14 @@ const Index = () => {
   const checkAccessibility = async () => {
     const response = await new Promise((resolve) => {
       setTimeout(() => {
-        resolve(["Missing alternative text for images", "Incorrect heading structure", "Lack of tagged PDF"]);
+        resolve({
+          score: 75,
+          issues: ["Missing alternative text for images", "Incorrect heading structure", "Lack of tagged PDF"],
+        });
       }, 2000);
     });
-    setIssues(response);
+    setIssues(response.issues);
+    setAccessibilityScore(response.score);
   };
 
   const remediatePDF = () => {
@@ -39,26 +44,31 @@ const Index = () => {
           </Button>
         </Box>
 
-        {issues.length > 0 && (
-          <Box>
-            <Heading as="h2" size="lg">
-              Accessibility Issues:
-            </Heading>
-            <UnorderedList>
-              {issues.map((issue, index) => (
-                <ListItem key={index}>
-                  <Text as="span" color="red.500" mr={2}>
-                    <FaTimes />
-                  </Text>
-                  {issue}
-                </ListItem>
-              ))}
-            </UnorderedList>
-            <Button mt={4} colorScheme="green" onClick={remediatePDF}>
-              Remediate PDF
-            </Button>
-          </Box>
-        )}
+        <Box>
+          <Heading as="h2" size="lg">
+            Accessibility Score: {accessibilityScore}
+          </Heading>
+          {issues.length > 0 && (
+            <Box>
+              <Heading as="h3" size="md" mt={4}>
+                Accessibility Issues:
+              </Heading>
+              <UnorderedList>
+                {issues.map((issue, index) => (
+                  <ListItem key={index}>
+                    <Text as="span" color="red.500" mr={2}>
+                      <FaTimes />
+                    </Text>
+                    {issue}
+                  </ListItem>
+                ))}
+              </UnorderedList>
+              <Button mt={4} colorScheme="green" onClick={remediatePDF}>
+                Remediate PDF
+              </Button>
+            </Box>
+          )}
+        </Box>
 
         {isRemediated && (
           <Box>
